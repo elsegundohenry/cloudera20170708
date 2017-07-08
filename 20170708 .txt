@@ -1,0 +1,238 @@
+3、安装rpm
+[root@bdd Packages]# pwd
+/run/media/root/CentOS 7 x86_64/Packages
+rpm -ivh postgresql-libs-9.2.13-1.el7_1.x86_64.rpm
+rpm -ivh postgresql-9.2.13-1.el7_1.x86_64.rpm
+rpm -ivh  postgresql-server-9.2.13-1.el7_1.x86_64.rpm
+rpm -ivh cyrus-sasl-gssapi-2.1.26-19.2.el7.x86_64.rpm
+rpm -ivh httpd-tools-2.4.6-40.el7.centos.x86_64.rpm
+rpm -ivh redhat-lsb-submod-security-4.1-27.el7.centos.1.x86_64.rpm
+rpm -ivh spax-1.5.2-13.el7.x86_64.rpm
+rpm -ivh redhat-lsb-core-4.1-27.el7.centos.1.x86_64.rpm
+rpm -ivh mailcap-2.1.41-2.el7.noarch.rpm
+rpm -ivh httpd-2.4.6-40.el7.centos.x86_64.rpm
+rpm -ivh mod_ssl-2.4.6-40.el7.centos.x86_64.rpm
+rpm -ivh  keyutils-libs-devel*
+rpm -ivh libcom_err-devel*
+rpm -ivh libsepol-devel*
+rpm -ivh pcre-8.32-15.el7.x86_64.rpm
+rpm -ivh pcre-devel-8.32-15.el7.x86_64.rpm
+
+如果遇到占线  rm -f /var/run/yum.pid
+
+yum -y install openssl-devel
+yum -y install python-psycopg2
+yum -y install MySQL-python
+yum -y install autoconf
+yum -y install httpd
+yum -y install redhat-lsb*
+yum -y install mod_ssl*
+yum -y install mod_ssl
+yum -y install nss-devel
+yum -y install ant
+yum -y install perl-JSON
+yum -y install perl-MailTools
+yum -y install zlib* 
+yum -y install gcc-c++
+yum -y install openssl-devel
+yum -y install tcl
+yum -y install tk
+
+
+
+4、卸载原有jkd，安装新的jdk
+
+
+[root@bdd opt]# rpm -qa | grep java
+java-1.8.0-openjdk-headless-1.8.0.65-3.b17.el7.x86_64
+tzdata-java-2015g-1.el7.noarch
+python-javapackages-3.4.1-11.el7.noarch
+java-1.8.0-openjdk-1.8.0.65-3.b17.el7.x86_64
+javapackages-tools-3.4.1-11.el7.noarch
+[root@bdd opt]# rpm -e --nodeps java-1.8.0-openjdk-headless-1.8.0.65-3.b17.el7.x86_64
+[root@bdd opt]# rpm -e --nodeps java-1.8.0-openjdk-1.8.0.65-3.b17.el7.x86_64
+[root@bdd opt]# rpm -qa | grep java
+tzdata-java-2015g-1.el7.noarch
+python-javapackages-3.4.1-11.el7.noarch
+javapackages-tools-3.4.1-11.el7.noarch
+[root@bdd java]# rpm -ivh jdk-8u45-linux-x64.rpm
+
+设定全局的JAVA_HOME
+修改/etc/profile在最后加入
+export JAVA_HOME=/usr/java/jdk1.8.0_45
+export PATH=$PATH:$JAVA_HOME
+[root@bdd ~]# . /etc/profile
+[root@bdd ~]# echo $JAVA_HOME
+/usr/java/jdk1.8.0_45
+
+5、关闭防火墙
+[root@bdd ~]# systemctl stop firewalld
+[root@bdd ~]# systemctl disable firewalld
+
+6、关闭SeLinux
+[root@bdd ~]#  vi /etc/sysconfig/selinux
+重启系统
+
+7、修改/etc/hosts
+192.168.1.140   cloudera
+
+修改/etc/hostname
+cloudera
+
+7.5 配置root的ssh免密码登录
+
+8、安装mysql
+本次使用的是hadoop课程的mysql
+[root@bdd opt]# mkdir /u01
+[root@bdd opt]# chmod -R 777 /u01
+[root@bdd opt]# tar -xzvf mysql-advanced-5.6.25-linux-glibc2.5-x86_64.tar.gz -C /u01
+[root@bdd opt]# cd /u01
+[root@bdd u01]# ls
+mysql-advanced-5.6.25-linux-glibc2.5-x86_64
+[root@bdd u01]# mkdir -p /u01/mysql/mydata
+[root@bdd u01]# cd mysql-advanced-5.6.25-linux-glibc2.5-x86_64/
+[root@bdd mysql-advanced-5.6.25-linux-glibc2.5-x86_64]# mv * ../mysql
+[root@bdd mysql-advanced-5.6.25-linux-glibc2.5-x86_64]# cd ..
+[root@bdd u01]# rm -rf mysql-advanced-5.6.25-linux-glibc2.5-x86_64/
+
+
+
+修改/etc/my.cnf
+[root@bdd u01]#  vi /etc/my.cnf
+内容如下：
+[mysqld]
+datadir=/u01/mysql/mydata
+socket=/tmp/mysql.sock
+port=3306
+skip-grant-tables
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+[mysql]
+socket=/tmp/mysql.sock
+port=3306
+
+初始化mysql
+[root@bdd u01]#  chmod -R 777 /u01
+[root@bdd u01]# cd mysql/scripts/
+[root@bdd scripts]# ./mysql_install_db --basedir=/u01/mysql --datadir=/u01/mysql/mydata &
+
+启动mysql
+出于安全考量，root用户不能启动mysql
+
+[root@bdd bin]#  chmod -R 777 /u01
+要换到henry用户
+[root@bdd1 ~]# su - henry
+[henry@bdd1 ~]$ cd /u01/mysql/bin
+[henry@bdd1 bin]$  ./mysqld --basedir=/u01/mysql --datadir=/u01/mysql/mydata &
+
+修改mysql中的root用户密码
+[henry@bdd1 bin]$ mysql
+MySQL [(none)]> use mysql
+
+
+将下面语句做成文件 1.sql 注意主机名的修改
+use mysql
+UPDATE user SET authentication_string=PASSWORD('oracle') where USER='root';
+flush privileges;
+grant all privileges on *.* to 'root'@'localhost'  identified by 'oracle' with grant option;
+grant all privileges on *.*  to root@'%' identified by 'oracle' with grant option;
+grant all privileges on *.* to 'root'@'cloudera' identified by 'oracle' with grant option;
+flush privileges;
+
+
+mysql
+mysql> source /home/henry/1.sql
+
+
+
+关闭mysql server
+使用root用户kill pid
+[root@bdd bin]# ps -ef |grep mysql
+henry     5017  4964  0 00:45 pts/2    00:00:00 ./mysqld --basedir=/u01/mysql --datadir=/u01/mysql/mydata
+root      5076  2306  0 00:49 pts/0    00:00:00 grep --color=auto mysql
+[root@bdd bin]# kill 5017
+
+修改/etc/my.cnf
+将skip-grant-tables注释掉。
+
+重启mysql server 
+[henry@bdd1 bin]$ mysqld --basedir=/u01/mysql --datadir=/u01/mysql/mydata &
+
+使用henry用户登录mysql测试密码
+[henry@bdd1 bin]$ mysql -uroot -p
+Enter password: 
+MySQL [(none)]> 
+
+
+9、安装python 3.4.6
+
+
+[root@test opt]# tar -xzvf Python-3.4.6.tgz
+[root@test opt]# cd Python-3.4.6/
+[root@test Python-3.4.6]# ./configure
+[root@test Python-3.4.6]# make && make install
+
+
+[root@test Python-3.4.6]# python3
+Python 3.4.6 (default, May 29 2017, 19:48:56)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-11)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+
+10、安装cm的rpm
+cd /opt
+ rpm -ivh cloudera-manager-daemons-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
+ rpm -ivh cloudera-manager-server-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
+ rpm -ivh enterprise-debuginfo-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
+ rpm -ivh cloudera-manager-server-db-2-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
+ rpm -ivh cloudera-manager-agent-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
+
+
+将cm5.9.2的tar放在/opt下，并解压
+[root@bdd bin]# cd /opt
+[root@bdd u01]# tar -xzvf cloudera-manager-centos7-cm5.9.2_x86_64.tar.gz
+[root@bdd u01]#  chmod -R 777 /u01
+
+11、将mysql的驱动放入指定位置，指定名称
+[root@bdd u01]# cp mysql-connector-java-5.1.36-bin.jar cm-5.9.2/share/cmf/lib/
+[root@bdd u01]# cp mysql-connector-java-5.1.36-bin.jar /usr/share/java/mysql-connector-java.jar
+
+12、创建cm的数据结构
+[root@bdd u01]# cd /opt/cm-5.9.2/share/cmf/schema/  
+[root@cloudera schema]# ./scm_prepare_database.sh mysql cm -hlocalhost -uroot -poracle --scm-host localhost scm scm scm
+
+
+
+
+
+
+14、创建用户  
+[root@bdd1 ~]# useradd --system --home=/opt/cm-5.9.2/run/cloudera-scm-server/ --no-create-home --shell=/bin/false --comment "Cloudera SCM User" cloudera-scm
+
+15、将parcel文件放入/opt/cloudera/parcel-repo 并设定权限
+
+[root@bdd1 ~]# chmod -R 777 /opt
+
+
+16、启动cm
+[root@bdd1 opt]# cd /opt/cm-5.9.2/etc/init.d
+[root@bdd1 init.d]# ./cloudera-scm-server start
+Starting cloudera-scm-server:                              [  OK  ]
+[root@bdd1 init.d]# 
+
+17、通过浏览器访问
+
+http://192.168.1.132:7180
