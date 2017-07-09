@@ -1,4 +1,4 @@
-3¡¢°²×°rpm
+3ã€å®‰è£…rpm
 [root@bdd Packages]# pwd
 /run/media/root/CentOS 7 x86_64/Packages
 rpm -ivh postgresql-libs-9.2.13-1.el7_1.x86_64.rpm
@@ -18,7 +18,7 @@ rpm -ivh libsepol-devel*
 rpm -ivh pcre-8.32-15.el7.x86_64.rpm
 rpm -ivh pcre-devel-8.32-15.el7.x86_64.rpm
 
-Èç¹ûÓöµ½Õ¼Ïß  rm -f /var/run/yum.pid
+å¦‚æœé‡åˆ°å çº¿  rm -f /var/run/yum.pid
 
 yum -y install openssl-devel
 yum -y install python-psycopg2
@@ -40,7 +40,7 @@ yum -y install tk
 
 
 
-4¡¢Ğ¶ÔØÔ­ÓĞjkd£¬°²×°ĞÂµÄjdk
+4ã€å¸è½½åŸæœ‰jkdï¼Œå®‰è£…æ–°çš„jdk
 
 
 [root@bdd opt]# rpm -qa | grep java
@@ -57,32 +57,32 @@ python-javapackages-3.4.1-11.el7.noarch
 javapackages-tools-3.4.1-11.el7.noarch
 [root@bdd java]# rpm -ivh jdk-8u45-linux-x64.rpm
 
-Éè¶¨È«¾ÖµÄJAVA_HOME
-ĞŞ¸Ä/etc/profileÔÚ×îºó¼ÓÈë
+è®¾å®šå…¨å±€çš„JAVA_HOME
+ä¿®æ”¹/etc/profileåœ¨æœ€ååŠ å…¥
 export JAVA_HOME=/usr/java/jdk1.8.0_45
 export PATH=$PATH:$JAVA_HOME
 [root@bdd ~]# . /etc/profile
 [root@bdd ~]# echo $JAVA_HOME
 /usr/java/jdk1.8.0_45
 
-5¡¢¹Ø±Õ·À»ğÇ½
+5ã€å…³é—­é˜²ç«å¢™
 [root@bdd ~]# systemctl stop firewalld
 [root@bdd ~]# systemctl disable firewalld
 
-6¡¢¹Ø±ÕSeLinux
+6ã€å…³é—­SeLinux
 [root@bdd ~]#  vi /etc/sysconfig/selinux
-ÖØÆôÏµÍ³
+é‡å¯ç³»ç»Ÿ
 
-7¡¢ĞŞ¸Ä/etc/hosts
+7ã€ä¿®æ”¹/etc/hosts
 192.168.1.140   cloudera
 
-ĞŞ¸Ä/etc/hostname
+ä¿®æ”¹/etc/hostname
 cloudera
 
-7.5 ÅäÖÃrootµÄsshÃâÃÜÂëµÇÂ¼
+7.5 é…ç½®rootçš„sshå…å¯†ç ç™»å½•
 
-8¡¢°²×°mysql
-±¾´ÎÊ¹ÓÃµÄÊÇhadoop¿Î³ÌµÄmysql
+8ã€å®‰è£…mysql
+æœ¬æ¬¡ä½¿ç”¨çš„æ˜¯hadoopè¯¾ç¨‹çš„mysql
 [root@bdd opt]# mkdir /u01
 [root@bdd opt]# chmod -R 777 /u01
 [root@bdd opt]# tar -xzvf mysql-advanced-5.6.25-linux-glibc2.5-x86_64.tar.gz -C /u01
@@ -97,9 +97,9 @@ mysql-advanced-5.6.25-linux-glibc2.5-x86_64
 
 
 
-ĞŞ¸Ä/etc/my.cnf
+ä¿®æ”¹/etc/my.cnf
 [root@bdd u01]#  vi /etc/my.cnf
-ÄÚÈİÈçÏÂ£º
+å†…å®¹å¦‚ä¸‹ï¼š
 [mysqld]
 datadir=/u01/mysql/mydata
 socket=/tmp/mysql.sock
@@ -124,26 +124,26 @@ pid-file=/var/run/mariadb/mariadb.pid
 socket=/tmp/mysql.sock
 port=3306
 
-³õÊ¼»¯mysql
+åˆå§‹åŒ–mysql
 [root@bdd u01]#  chmod -R 777 /u01
 [root@bdd u01]# cd mysql/scripts/
 [root@bdd scripts]# ./mysql_install_db --basedir=/u01/mysql --datadir=/u01/mysql/mydata &
 
-Æô¶¯mysql
-³öÓÚ°²È«¿¼Á¿£¬rootÓÃ»§²»ÄÜÆô¶¯mysql
+å¯åŠ¨mysql
+å‡ºäºå®‰å…¨è€ƒé‡ï¼Œrootç”¨æˆ·ä¸èƒ½å¯åŠ¨mysql
 
 [root@bdd bin]#  chmod -R 777 /u01
-Òª»»µ½henryÓÃ»§
+è¦æ¢åˆ°henryç”¨æˆ·
 [root@bdd1 ~]# su - henry
 [henry@bdd1 ~]$ cd /u01/mysql/bin
 [henry@bdd1 bin]$  ./mysqld --basedir=/u01/mysql --datadir=/u01/mysql/mydata &
 
-ĞŞ¸ÄmysqlÖĞµÄrootÓÃ»§ÃÜÂë
+ä¿®æ”¹mysqlä¸­çš„rootç”¨æˆ·å¯†ç 
 [henry@bdd1 bin]$ mysql
 MySQL [(none)]> use mysql
 
 
-½«ÏÂÃæÓï¾ä×ö³ÉÎÄ¼ş 1.sql ×¢ÒâÖ÷»úÃûµÄĞŞ¸Ä
+å°†ä¸‹é¢è¯­å¥åšæˆæ–‡ä»¶ 1.sql æ³¨æ„ä¸»æœºåçš„ä¿®æ”¹
 use mysql
 UPDATE user SET authentication_string=PASSWORD('oracle') where USER='root';
 flush privileges;
@@ -158,26 +158,26 @@ mysql> source /home/henry/1.sql
 
 
 
-¹Ø±Õmysql server
-Ê¹ÓÃrootÓÃ»§kill pid
+å…³é—­mysql server
+ä½¿ç”¨rootç”¨æˆ·kill pid
 [root@bdd bin]# ps -ef |grep mysql
 henry     5017  4964  0 00:45 pts/2    00:00:00 ./mysqld --basedir=/u01/mysql --datadir=/u01/mysql/mydata
 root      5076  2306  0 00:49 pts/0    00:00:00 grep --color=auto mysql
 [root@bdd bin]# kill 5017
 
-ĞŞ¸Ä/etc/my.cnf
-½«skip-grant-tables×¢ÊÍµô¡£
+ä¿®æ”¹/etc/my.cnf
+å°†skip-grant-tablesæ³¨é‡Šæ‰ã€‚
 
-ÖØÆômysql server 
+é‡å¯mysql server 
 [henry@bdd1 bin]$ mysqld --basedir=/u01/mysql --datadir=/u01/mysql/mydata &
 
-Ê¹ÓÃhenryÓÃ»§µÇÂ¼mysql²âÊÔÃÜÂë
+ä½¿ç”¨henryç”¨æˆ·ç™»å½•mysqlæµ‹è¯•å¯†ç 
 [henry@bdd1 bin]$ mysql -uroot -p
 Enter password: 
 MySQL [(none)]> 
 
 
-9¡¢°²×°python 3.4.6
+9ã€å®‰è£…python 3.4.6
 
 
 [root@test opt]# tar -xzvf Python-3.4.6.tgz
@@ -192,7 +192,7 @@ Python 3.4.6 (default, May 29 2017, 19:48:56)
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 
-10¡¢°²×°cmµÄrpm
+10ã€å®‰è£…cmçš„rpm
 cd /opt
  rpm -ivh cloudera-manager-daemons-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
  rpm -ivh cloudera-manager-server-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
@@ -201,16 +201,16 @@ cd /opt
  rpm -ivh cloudera-manager-agent-5.9.2-1.cm592.p0.3.el7.x86_64.rpm
 
 
-½«cm5.9.2µÄtar·ÅÔÚ/optÏÂ£¬²¢½âÑ¹
+å°†cm5.9.2çš„taræ”¾åœ¨/optä¸‹ï¼Œå¹¶è§£å‹
 [root@bdd bin]# cd /opt
 [root@bdd u01]# tar -xzvf cloudera-manager-centos7-cm5.9.2_x86_64.tar.gz
-[root@bdd u01]#  chmod -R 777 /u01
+[root@bdd u01]#  chmod -R 777 /opt
 
-11¡¢½«mysqlµÄÇı¶¯·ÅÈëÖ¸¶¨Î»ÖÃ£¬Ö¸¶¨Ãû³Æ
+11ã€å°†mysqlçš„é©±åŠ¨æ”¾å…¥æŒ‡å®šä½ç½®ï¼ŒæŒ‡å®šåç§°
 [root@bdd u01]# cp mysql-connector-java-5.1.36-bin.jar cm-5.9.2/share/cmf/lib/
 [root@bdd u01]# cp mysql-connector-java-5.1.36-bin.jar /usr/share/java/mysql-connector-java.jar
 
-12¡¢´´½¨cmµÄÊı¾İ½á¹¹
+12ã€åˆ›å»ºcmçš„æ•°æ®ç»“æ„
 [root@bdd u01]# cd /opt/cm-5.9.2/share/cmf/schema/  
 [root@cloudera schema]# ./scm_prepare_database.sh mysql cm -hlocalhost -uroot -poracle --scm-host localhost scm scm scm
 
@@ -219,20 +219,20 @@ cd /opt
 
 
 
-14¡¢´´½¨ÓÃ»§  
+14ã€åˆ›å»ºç”¨æˆ·  
 [root@bdd1 ~]# useradd --system --home=/opt/cm-5.9.2/run/cloudera-scm-server/ --no-create-home --shell=/bin/false --comment "Cloudera SCM User" cloudera-scm
 
-15¡¢½«parcelÎÄ¼ş·ÅÈë/opt/cloudera/parcel-repo ²¢Éè¶¨È¨ÏŞ
+15ã€å°†parcelæ–‡ä»¶æ”¾å…¥/opt/cloudera/parcel-repo å¹¶è®¾å®šæƒé™
 
 [root@bdd1 ~]# chmod -R 777 /opt
 
 
-16¡¢Æô¶¯cm
+16ã€å¯åŠ¨cm
 [root@bdd1 opt]# cd /opt/cm-5.9.2/etc/init.d
 [root@bdd1 init.d]# ./cloudera-scm-server start
 Starting cloudera-scm-server:                              [  OK  ]
 [root@bdd1 init.d]# 
 
-17¡¢Í¨¹ıä¯ÀÀÆ÷·ÃÎÊ
+17ã€é€šè¿‡æµè§ˆå™¨è®¿é—®
 
 http://192.168.1.132:7180
