@@ -1,0 +1,8 @@
+vi /etc/sysctl.conf
+末尾加上 如果检测是的时候，还报错：root用户在所有节点执行 sysctl vm.swappiness=10
+vm.swappiness=10
+
+vi /etc/rc.local
+末尾加上(永久生效) 如果运行时，还检测出有问题，就将下面的代码在root用户下，在所有节点上执行。
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
