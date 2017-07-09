@@ -59,11 +59,10 @@ javapackages-tools-3.4.1-11.el7.noarch
 
 设定全局的JAVA_HOME
 修改/etc/profile在最后加入
-export JAVA_HOME=/usr/java/jdk1.8.0_45
+export JAVA_HOME=/usr/java/jdk1.8.0_121
 export PATH=$PATH:$JAVA_HOME
 [root@bdd ~]# . /etc/profile
-[root@bdd ~]# echo $JAVA_HOME
-/usr/java/jdk1.8.0_45
+
 
 5、关闭防火墙
 [root@bdd ~]# systemctl stop firewalld
